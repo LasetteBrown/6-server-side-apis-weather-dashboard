@@ -33,8 +33,9 @@
         </aside>
         <div class="col-md-8">
             <div class="card">
-                <div class="card-body city-weather">
+                <div class="card-body current-weather">
                     <h3 class="card-title city-name">Check the weather for any city!</h3>
+                    <div class="city-weather"></div>
                 </div>
             </div>
             <div class="5day-forcast">
@@ -58,6 +59,8 @@
         var now = luxon.DateTime.local()
 
         function getWeather() {
+
+            $(".city-weather").html("")
 
             var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + searchInput + '&units=imperial&appid=7aae0d65ca472bf0f42c97f44d7c7a82';
             fetch(requestUrl)
@@ -106,12 +109,29 @@
                 .then(function (uvData) {
                     console.log(uvData)
                     var uvIndex = $("<div>")
+                    uvIndex.addClass("uv-risk")
                     uvIndex.text("UV Index: " + uvData.value)
                     $(".city-weather").append(uvIndex)
 
+                    var uvRisk = parseInt(uvData.value)
+                    if (uvRisk <= 2) {
+                        $(".uv-risk").attr("style", "background-color:green")
+                    } else if (uvRisk <= 5) {
+                        $(".uv-risk").attr("style", "background-color:yellow; color:gray")
+
+                    } else if (uvRisk <= 7) {
+                        $(".uv-risk").attr("style", "background-color:orange")
+
+                    } else {
+                        $(".uv-risk").attr("style", "background-color:red")
+                    }
                 })
+        }
+
+        function get5Day() {
 
         }
+
         $("#city-search-btn").on("click", function () {
             event.preventDefault();
 
