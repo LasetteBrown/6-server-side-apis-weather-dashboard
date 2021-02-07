@@ -55,19 +55,20 @@
     <script>
         //when the user clicks on the search button
         var searchInput = ""
-
         var now = luxon.DateTime.local()
 
         function getWeather() {
 
-            var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + searchInput + '&appid=7aae0d65ca472bf0f42c97f44d7c7a82';
-
+            var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + searchInput + '&units=imperial&appid=7aae0d65ca472bf0f42c97f44d7c7a82';
             fetch(requestUrl)
                 .then(function (response) {
                     return response.json();
                 })
                 .then(function (data) {
                     console.log(data)
+                    var locationLat = data.coord.lat
+                    var locationLon = data.coord.lon
+                    var locationTime = data.coord.dt
 
                     var iconTag = data.weather[0].icon
                     var iconImage = $("<img>")
@@ -77,7 +78,7 @@
                     $(".city-name").append(iconImage)
 
                     var temperature = $("<div>")
-                    temperature.text("Temperature: " + data.main.temp)
+                    temperature.text("Temperature: " + data.main.temp + " °F")
                     temperature.attr("units", "imperial")
                     $(".city-weather").append(temperature)
 
@@ -89,9 +90,27 @@
                     windSpeed.text("Wind Speed: " + data.wind.speed + " MPH")
                     $(".city-weather").append(windSpeed)
 
-                    var uvIndex = $("<div>")
-                    uvIndex.text("UV Index: " + "tbd")
+                    getUvIndex(locationLat, locationLon, locationTime)
+
                 });
+
+        }
+
+        function getUvIndex(locationLat, locationLon, locationTime) {
+            var uvUrl = `http://api.openweathermap.org/data/2.5/uvi?lat=${locationLat}&lon=${locationLon}&date_iso=${locationTime}&appid=7aae0d65ca472bf0f42c97f44d7c7a82`
+            console.log("lon: ", locationLon, "lat: ", locationLat)
+            fetch(uvUrl)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (uvData) {
+                    console.log(uvData)
+                    var uvIndex = $("<div>")
+                    uvIndex.text("UV Index: " + uvData.value)
+                    $(".city-weather").append(uvIndex)
+
+                })
+
         }
         $("#city-search-btn").on("click", function () {
             event.preventDefault();
