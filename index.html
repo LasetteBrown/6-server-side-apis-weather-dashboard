@@ -58,6 +58,14 @@
         var searchInput = ""
         var now = luxon.DateTime.local()
 
+        var searchHistory = []
+
+        function storeSearches() {
+            searchHistory.push(searchInput)
+            window.localStorage.setItem("previous", JSON.stringify(searchHistory));
+
+        }
+
         function getWeather() {
 
             $(".city-weather").html("")
@@ -68,7 +76,7 @@
                     return response.json();
                 })
                 .then(function (data) {
-                    console.log(data)
+
                     var locationLat = data.coord.lat
                     var locationLon = data.coord.lon
                     var locationTime = data.coord.dt
@@ -93,8 +101,9 @@
                     windSpeed.text("Wind Speed: " + data.wind.speed + " MPH")
                     $(".city-weather").append(windSpeed)
 
+                    $("div").attr("style", "padding:10px")
                     getUvIndex(locationLat, locationLon, locationTime)
-
+                    get5Day()
                 });
 
         }
@@ -107,7 +116,7 @@
                     return response.json();
                 })
                 .then(function (uvData) {
-                    console.log(uvData)
+
                     var uvIndex = $("<div>")
                     uvIndex.addClass("uv-risk")
                     uvIndex.text("UV Index: " + uvData.value)
@@ -129,13 +138,45 @@
         }
 
         function get5Day() {
+            var forcastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${searchInput}&units=imperial&appid=7aae0d65ca472bf0f42c97f44d7c7a82`
+            fetch(forcastUrl)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log(data)
 
+                    for (var i = 0; i < 5; i++) {
+                        var day = $("<div>")
+                        day.addClass("forcast-card")
+                        $(".5day-forcast").append(day)
+
+                        var forcastDate = $("<h5>")
+                        forcastDate.text(now.plus({ days: 1 + i }).toLocaleString({ year: 'numeric', month: 'numeric', day: 'numeric', }))
+                        day.append(forcastDate)
+
+                        var iconId = data.list[i].weather[0].icon
+                        var forcastIcon = $("<img>")
+                        forcastIcon.attr("src", `http://openweathermap.org/img/wn/${iconId}@2x.png`)
+                        day.append(forcastIcon)
+
+                        var forcastTemp = $("<p>")
+                        forcastTemp.text("Temp: " + data.list[i].main.temp + " °F")
+                        day.append(forcastTemp)
+
+                        var forcastHumid = $("<p>")
+                        forcastHumid.text("Humidity: " + data.list[i].main.humidity + " %")
+                        day.append(forcastHumid)
+
+                    }
+                })
         }
 
         $("#city-search-btn").on("click", function () {
             event.preventDefault();
 
             searchInput = document.getElementById("city-search").elements["city"].value.trim()
+
             console.log(searchInput)
             getWeather()
         })

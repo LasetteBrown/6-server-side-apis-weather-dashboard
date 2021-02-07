@@ -11,8 +11,15 @@ main {
     padding: 5px;
 }
 .current-weather {
-    margin: 20px;
-    padding: 10px;
     background-color: skyblue;
     color: seashell;
+}
+
+.forcast-card{
+    border: solid;
+    background-color: skyblue;
+    color: seashell;
+    float: left;
+    margin-left: 20px;
+    padding: 10px;
 }
