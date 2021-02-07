@@ -51,18 +51,52 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!-- Added link to my javascript -->
-    <script src="./assets/js/script.js"></script>
+    <script src="./Assets/js/luxon.js"></script>
     <script>
         //when the user clicks on the search button
         var searchInput = ""
 
+        var now = luxon.DateTime.local()
+
         function getWeather() {
 
+            var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + searchInput + '&appid=7aae0d65ca472bf0f42c97f44d7c7a82';
+
+            fetch(requestUrl)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log(data)
+
+                    var iconTag = data.weather[0].icon
+                    var iconImage = $("<img>")
+                    iconImage.attr("src", `http://openweathermap.org/img/wn/${iconTag}@2x.png`)
+
+                    $(".city-name").text(data.name + " (" + now.toLocaleString({ year: 'numeric', month: 'numeric', day: 'numeric', }) + ") ")
+                    $(".city-name").append(iconImage)
+
+                    var temperature = $("<div>")
+                    temperature.text("Temperature: " + data.main.temp)
+                    temperature.attr("units", "imperial")
+                    $(".city-weather").append(temperature)
+
+                    var humidity = $("<div>")
+                    humidity.text("Humidity: " + data.main.humidity + " %")
+                    $(".city-weather").append(humidity)
+
+                    var windSpeed = $("<div>")
+                    windSpeed.text("Wind Speed: " + data.wind.speed + " MPH")
+                    $(".city-weather").append(windSpeed)
+
+                    var uvIndex = $("<div>")
+                    uvIndex.text("UV Index: " + "tbd")
+                });
         }
         $("#city-search-btn").on("click", function () {
             event.preventDefault();
 
-            searchInput = document.getElementById("city-search").elements["city"].value
+            searchInput = document.getElementById("city-search").elements["city"].value.trim()
             console.log(searchInput)
             getWeather()
         })
