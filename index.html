@@ -14,17 +14,18 @@
 </head>
 
 <body>
-    <nav class="nav justify-content-center">
+    <header class="nav justify-content-center">
         <div class="nav-item">
             <h1>Weather Dashboard</h1>
         </div>
-    </nav>
+    </header>
     <main class="row">
         <aside class="col-md-4">
             <h5>Search for a City:</h5>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            <form class="d-flex" id="city-search">
+                <input class="form-control me-2" type="search" name="city" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-secondary" id="city-search-btn" type="submit"
+                    value="submit">Search</button>
             </form>
             <div class="past-searches">
 
@@ -51,6 +52,40 @@
 
     <!-- Added link to my javascript -->
     <script src="./assets/js/script.js"></script>
+    <script>
+        //when the user clicks on the search button
+        var searchInput = ""
+
+        function getWeather() {
+
+        }
+        $("#city-search-btn").on("click", function () {
+            event.preventDefault();
+
+            searchInput = document.getElementById("city-search").elements["city"].value
+            console.log(searchInput)
+            getWeather()
+        })
+
+//take the user's search input
+//and fetch matching information from the weather api
+//display the name of the city
+//display today's date
+//display an icon matching the current weather
+//display the current temperature
+//display the current humidity
+//display the current windspeed
+//display the current UV index
+//with a background color appropriate to it's rating
+//display the 5 day forcast
+//with a box for each day
+//in which is displayed the date, weather icon, temp, and humitidy
+//save the search input to local storage
+//and display past searches below the search bar
+//when any past city is clicked
+//the data for that city is displayed again
+
+    </script>
 </body>
 
 </html>
