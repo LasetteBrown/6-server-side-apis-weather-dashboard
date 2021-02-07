@@ -1,3 +1,12 @@
 body {
-    background-color: yellow;
+    background-color: seashell;
+    color: rgb(36, 33, 33);
+}
+nav {
+    background-color: gray;
+    color: seashell;
+}
+main {
+    margin: 20px;
+    padding: 5px;
 }
