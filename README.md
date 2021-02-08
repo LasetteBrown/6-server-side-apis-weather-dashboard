@@ -1,92 +1,58 @@
-# 6-server-side-apis-weather-dashboard
-
 # 06 Server-Side APIs: Weather Dashboard
 
-## Your Task
+A project to introduce the concept of server-side api's through the implementation of a weather dashboard.
 
-Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
+## Purpose and Scope
 
-Use the [OpenWeather API](https://openweathermap.org/api) to retrieve weather data for cities. The documentation includes a section called "How to start" that provides basic setup and usage instructions. You will use `localStorage` to store any persistent data.
+The purpose of this website is to allow a user to search for a city and view the weather forcast for the day as well as the next 5 days. 
 
-## User Story
+The app is limited in scope in the following ways. First, at the moment there is no way to specify the State or Country of the city. Therefore searching a city brings up data for a city by that name and not necessarily within the desired State or Country.  Second, the ap only brings up weather for today and the next five days. It does not allow the user to look farther into the future or review weather from the past.
 
-```
-AS A traveler
-I WANT to see the weather outlook for multiple cities
-SO THAT I can plan a trip accordingly
-```
 
-## Acceptance Criteria
+## Installation
 
-```
-GIVEN a weather dashboard with form inputs
-WHEN I search for a city
-THEN I am presented with current and future conditions for that city and that city is added to the search history
-WHEN I view current weather conditions for that city
-THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
-WHEN I view the UV index
-THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
-WHEN I view future weather conditions for that city
-THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, and the humidity
-WHEN I click on a city in the search history
-THEN I am again presented with current and future conditions for that city
-```
+No installation is required. This is a web-based ap. Click here to access it:
+https://lasettebrown.github.io/6-server-side-apis-weather-dashboard/
 
-## Mock-Up
+## Instructions
 
-The following image shows the web application's appearance and functionality:
+When the site loads the user will be presented with instructions and a search bar.
+![Load Screen](./assets/images/LoadScreenCapture.PNG)
 
-![The weather app includes a search option, a list of cities, and a five-day forecast and current weather conditions for Atlanta.](./Assets/images/06-server-side-apis-homework-demo.png)
+The user may enter the name of a city into the search field and click the 'search' button. Doing so brings up the weather for the current day as well as the five day forcast. The user's search is saved and listed below the search bar.
+![Weather Report](./assets/images/SearchEnglewoodCapture.PNG)
 
-## Grading Requirements
+The current weather contains the name of the city, the current date, an icon representing the weather (for a list of icons look here: https://openweathermap.org/weather-conditions#How-to-get-icon-URL), the current temperature, humidity, wind speed, and UV Index. The UV Index is color coded according to the risk level. (More information about UV Index is available here: https://en.wikipedia.org/wiki/Ultraviolet_index )
 
-This homework is graded based on the following criteria: 
+Below today's weather, five boxes appear showing the weather forcast for the next five days. 
 
-### Technical Acceptance Criteria: 40%
+Clicking on a previously searched city brings up the information about that city again.
 
-* Satisfies all of the above acceptance criteria plus the following:
+## Built with
 
-    * Uses the OpenWeather API to retrieve weather data.
+I used Luxon to access and format dates and times for this project. I used the Open Weather API for all weather and forcast information. I also used bootstrap and jQuery.
 
-    * Uses `localStorage` to store persistent data.
+Find more information about OpenWeather here:
+  * [OpenWeather API](https://openweathermap.org/api)
 
-### Deployment: 32%
+Find more information about Luxon here:
+  * [Luxon](https://moment.github.io/luxon/)
 
-* Application deployed at live URL.
+## Authors
 
-* Application loads with no errors.
+All HTML, CSS, Javascript, and Jquery were written entirely by Lasette Brown.
 
-* Application GitHub URL submitted.
 
-* GitHub repository that contains application code.
+## License
 
-### Application Quality: 15%
+The content of this website is copyrighted. Please do not use the content without permission.
+© 2021 Lasette Brown. All Rights Reserved.
 
-* Application user experience is intuitive and easy to navigate.
 
-* Application user interface style is clean and polished.
 
-* Application resembles the mock-up functionality provided in the homework instructions.
 
-### Repository Quality: 13%
 
-* Repository has a unique name.
 
-* Repository follows best practices for file structure and naming conventions.
 
-* Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
 
-* Repository contains multiple descriptive commit messages.
 
-* Repository contains quality readme file with description, screenshot, and link to deployed application.
-
-## Review
-
-You are required to submit BOTH of the following for review:
-
-* The URL of the functional, deployed application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a readme describing the project.
-
-- - -
-© 2021 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.

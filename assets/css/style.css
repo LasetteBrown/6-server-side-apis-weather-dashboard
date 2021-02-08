@@ -8,24 +8,23 @@ header {
 }
 main {
     margin: 20px;
-    padding: 5px;
+    padding: 5%;
 }
 div {
     padding:10px
 }
 
 .current-weather {
-    background-color:darkblue;
+    background-color:cornflowerblue;
     color: seashell;
 }
 
 .forcast-card{
     border: solid;
-    background-color: darkblue;
+    background-color: cornflowerblue;
     color: seashell;
     float: left;
-    margin-left: 20px;
-    padding: 10px;
+    margin: 1%;
 }
 
 #city-search-btn i:hover {
