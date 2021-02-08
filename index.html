@@ -60,10 +60,28 @@
 
         var searchHistory = []
 
+        searchHistory = JSON.parse(localStorage.getItem("events"));
+        //unless there is nothing saved...
+        if (searchHistory === null) {
+            searchHistory = []
+        }
+
+        function showPrevious() {
+            $(".past-searches").html("")
+
+            for (var i = 0; i < searchHistory.length; i++) {
+
+                var previousSearch = $("<div>")
+                previousSearch.text(searchHistory[i])
+                $(".past-searches").append(previousSearch)
+
+            }
+
+        }
+
         function storeSearches() {
             searchHistory.push(searchInput)
             window.localStorage.setItem("previous", JSON.stringify(searchHistory));
-
         }
 
         function getWeather() {
@@ -138,6 +156,8 @@
         }
 
         function get5Day() {
+            $(".5day-forcast").html("")
+
             var forcastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${searchInput}&units=imperial&appid=7aae0d65ca472bf0f42c97f44d7c7a82`
             fetch(forcastUrl)
                 .then(function (response) {
@@ -176,10 +196,19 @@
             event.preventDefault();
 
             searchInput = document.getElementById("city-search").elements["city"].value.trim()
-
-            console.log(searchInput)
+            storeSearches()
+            showPrevious()
             getWeather()
         })
+
+        $(".past-searches").on("click", function () {
+
+            searchInput = event.target.innerText
+            getWeather()
+        })
+
+        showPrevious()
+
 
 //take the user's search input
 //and fetch matching information from the weather api
