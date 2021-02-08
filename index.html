@@ -54,92 +54,104 @@
     <!-- Added link to my javascript -->
     <script src="./Assets/js/luxon.js"></script>
     <script>
-        //when the user clicks on the search button
+        //global variables: a variable for the user input
         var searchInput = ""
+        //a variable for today's date
         var now = luxon.DateTime.local()
-
+        //and a variable for previous search history
         var searchHistory = []
 
-        searchHistory = JSON.parse(localStorage.getItem("events"));
+        //bring previous search history up from local storage
+        searchHistory = JSON.parse(localStorage.getItem("previous"));
         //unless there is nothing saved...
         if (searchHistory === null) {
             searchHistory = []
         }
 
+        //this function is called at the bottom of the page and runs when the page is loaded
+        //it also runs everytime the user searches a new city
         function showPrevious() {
+            //clear out past searches div
             $(".past-searches").html("")
-
+            //and add all content from the search history variable array
             for (var i = 0; i < searchHistory.length; i++) {
-
                 var previousSearch = $("<div>")
                 previousSearch.text(searchHistory[i])
                 $(".past-searches").append(previousSearch)
-
             }
-
         }
 
+        //a simple function to store search history into local storage
         function storeSearches() {
-            searchHistory.push(searchInput)
             window.localStorage.setItem("previous", JSON.stringify(searchHistory));
         }
 
+        //the primary function that is called when search is clicked
         function getWeather() {
-
+            //empty out main div
             $(".city-weather").html("")
-
+            //fetch data from the weather api
             var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + searchInput + '&units=imperial&appid=7aae0d65ca472bf0f42c97f44d7c7a82';
             fetch(requestUrl)
                 .then(function (response) {
+                    //makes sure the response from the fetch is readable as an object
                     return response.json();
                 })
                 .then(function (data) {
-
+                    //variables that record the item's info
                     var locationLat = data.coord.lat
                     var locationLon = data.coord.lon
-                    var locationTime = data.coord.dt
 
+                    //create an icon for the weather
                     var iconTag = data.weather[0].icon
                     var iconImage = $("<img>")
                     iconImage.attr("src", `http://openweathermap.org/img/wn/${iconTag}@2x.png`)
-
+                    //display the searched for city's name and date
                     $(".city-name").text(data.name + " (" + now.toLocaleString({ year: 'numeric', month: 'numeric', day: 'numeric', }) + ") ")
+                    //along with the icon for the weather
                     $(".city-name").append(iconImage)
 
+                    //creates a div for the temperature to be displayed
                     var temperature = $("<div>")
                     temperature.text("Temperature: " + data.main.temp + " °F")
                     temperature.attr("units", "imperial")
                     $(".city-weather").append(temperature)
 
+                    //creates a div for the humidity to be displayed
                     var humidity = $("<div>")
                     humidity.text("Humidity: " + data.main.humidity + " %")
                     $(".city-weather").append(humidity)
 
+                    //creates a div for the windspeed to be displayed
                     var windSpeed = $("<div>")
                     windSpeed.text("Wind Speed: " + data.wind.speed + " MPH")
                     $(".city-weather").append(windSpeed)
 
-                    $("div").attr("style", "padding:10px")
-                    getUvIndex(locationLat, locationLon, locationTime)
+                    //the UV index requires a seporate fetch so I called it as a seporate function
+                    getUvIndex(locationLat, locationLon)
+                    //same with the forcast
                     get5Day()
                 });
 
         }
 
-        function getUvIndex(locationLat, locationLon, locationTime) {
-            var uvUrl = `http://api.openweathermap.org/data/2.5/uvi?lat=${locationLat}&lon=${locationLon}&date_iso=${locationTime}&appid=7aae0d65ca472bf0f42c97f44d7c7a82`
-            console.log("lon: ", locationLon, "lat: ", locationLat)
+        //a function to fetch the UV Index and color it properly
+        function getUvIndex(locationLat, locationLon) {
+            var uvUrl = `http://api.openweathermap.org/data/2.5/uvi?lat=${locationLat}&lon=${locationLon}&date_iso=}&appid=7aae0d65ca472bf0f42c97f44d7c7a82`
+            //gets data from the UV api
             fetch(uvUrl)
                 .then(function (response) {
+                    //make sure it is readable as an object
                     return response.json();
                 })
                 .then(function (uvData) {
-
+                    //creates a div to display the number
                     var uvIndex = $("<div>")
                     uvIndex.addClass("uv-risk")
                     uvIndex.text("UV Index: " + uvData.value)
                     $(".city-weather").append(uvIndex)
 
+                    //and color codes it according to risk level
                     var uvRisk = parseInt(uvData.value)
                     if (uvRisk <= 2) {
                         $(".uv-risk").attr("style", "background-color:green")
@@ -155,35 +167,41 @@
                 })
         }
 
+        //a function for fetching the 5 day forcast information
         function get5Day() {
+            //clears out previous data
             $(".5day-forcast").html("")
-
+            //fetches the new data
             var forcastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${searchInput}&units=imperial&appid=7aae0d65ca472bf0f42c97f44d7c7a82`
             fetch(forcastUrl)
+                //makes sure it is readible as an object
                 .then(function (response) {
                     return response.json();
                 })
                 .then(function (data) {
-                    console.log(data)
-
+                    //creates a card for the next 5 days
                     for (var i = 0; i < 5; i++) {
                         var day = $("<div>")
                         day.addClass("forcast-card")
                         $(".5day-forcast").append(day)
 
+                        //including a title with the date
                         var forcastDate = $("<h5>")
                         forcastDate.text(now.plus({ days: 1 + i }).toLocaleString({ year: 'numeric', month: 'numeric', day: 'numeric', }))
                         day.append(forcastDate)
 
+                        //adds the appropriate icon
                         var iconId = data.list[i].weather[0].icon
                         var forcastIcon = $("<img>")
                         forcastIcon.attr("src", `http://openweathermap.org/img/wn/${iconId}@2x.png`)
                         day.append(forcastIcon)
 
+                        //adds the forcasted temperature
                         var forcastTemp = $("<p>")
                         forcastTemp.text("Temp: " + data.list[i].main.temp + " °F")
                         day.append(forcastTemp)
 
+                        //and the forcasted humidity
                         var forcastHumid = $("<p>")
                         forcastHumid.text("Humidity: " + data.list[i].main.humidity + " %")
                         day.append(forcastHumid)
@@ -192,41 +210,32 @@
                 })
         }
 
+        //when the user clicks on the search button
         $("#city-search-btn").on("click", function () {
             event.preventDefault();
-
+            //set the global variable to the user input
             searchInput = document.getElementById("city-search").elements["city"].value.trim()
+            //add the search input to search history
+            searchHistory.push(searchInput)
+            //and run the get weather function            
+            getWeather()
+
+            //also store the previous searches in local storage
             storeSearches()
+            //and update the list of previous searches on the screen
             showPrevious()
-            getWeather()
         })
 
+        //when a previous search is clicked
         $(".past-searches").on("click", function () {
-
+            //input the city clicked into the search Input variable
             searchInput = event.target.innerText
+            //and get the weather again
             getWeather()
         })
 
+        //when the page loads this function runs
         showPrevious()
-
-
-//take the user's search input
-//and fetch matching information from the weather api
-//display the name of the city
-//display today's date
-//display an icon matching the current weather
-//display the current temperature
-//display the current humidity
-//display the current windspeed
-//display the current UV index
-//with a background color appropriate to it's rating
-//display the 5 day forcast
-//with a box for each day
-//in which is displayed the date, weather icon, temp, and humitidy
-//save the search input to local storage
-//and display past searches below the search bar
-//when any past city is clicked
-//the data for that city is displayed again
 
     </script>
 </body>

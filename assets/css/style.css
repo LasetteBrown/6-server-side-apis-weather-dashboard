@@ -10,16 +10,25 @@ main {
     margin: 20px;
     padding: 5px;
 }
+div {
+    padding:10px
+}
+
 .current-weather {
-    background-color: skyblue;
+    background-color:darkblue;
     color: seashell;
 }
 
 .forcast-card{
     border: solid;
-    background-color: skyblue;
+    background-color: darkblue;
     color: seashell;
     float: left;
     margin-left: 20px;
     padding: 10px;
+}
+
+#city-search-btn i:hover {
+    font-size: 20px;
+    transition: all .3s ease-in-out;
 }
