@@ -138,7 +138,7 @@
 
         //a function to fetch the UV Index and color it properly
         function getUvIndex(locationLat, locationLon) {
-            var uvUrl = `http://api.openweathermap.org/data/2.5/uvi?lat=${locationLat}&lon=${locationLon}&date_iso=}&appid=7aae0d65ca472bf0f42c97f44d7c7a82`
+            var uvUrl = `http://api.openweathermap.org/data/2.5/uvi?lat=${locationLat}&lon=${locationLon}&date_iso=${now.toISO()}&appid=7aae0d65ca472bf0f42c97f44d7c7a82`
             //gets data from the UV api
             fetch(uvUrl)
                 .then(function (response) {
